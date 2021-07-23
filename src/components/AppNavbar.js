@@ -21,11 +21,11 @@ const AppNavbar = () => {
  
    return (
       <div>
-         <Navbar color="dark" dark expand="md">
+         <Navbar color="dark" dark expand="sd" className='mb-5'>
             <NavbarBrand href="/">Shopping List</NavbarBrand>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
-               <Nav className="mr-auto" navbar>
+               <Nav className="ml-auto" navbar>
                   <NavItem>
                      <NavLink href="/components/">Components</NavLink>
                   </NavItem>
