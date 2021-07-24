@@ -14,7 +14,7 @@ function ItemReducers (state = initialState, action) {
       case GET_ITEMS:
          return {
             ...state,
-            items: action.payload
+            // items: action.payload
          }
       case DELETE_ITEM: 
       return {
