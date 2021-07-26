@@ -44,7 +44,7 @@ export const ItemReducers = createSlice({
 });
 
 export const { GET_ITEMS, ADD_ITEM, DELETE_ITEM } = ItemReducers.actions
-export const selectItem = state => state.item.item
+export const selectItem = state => state.item
 
 
 
