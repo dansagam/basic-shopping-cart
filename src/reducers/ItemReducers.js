@@ -44,10 +44,11 @@ export const ItemReducers = createSlice({
 });
 
 export const { GET_ITEMS, ADD_ITEM, DELETE_ITEM } = ItemReducers.actions
-export const selectItem = state => state.item
+export const selectItem = state => state.item.items
 
 
 
+export default ItemReducers.reducer;
 
 
 // function ItemReducers (state = initialState, action) {
@@ -78,4 +79,3 @@ export const selectItem = state => state.item
 // }
 
 
-export default ItemReducers.reducer;

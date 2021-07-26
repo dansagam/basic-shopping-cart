@@ -34,7 +34,7 @@ const ShoppingList = () => {
             </Button>
             <ListGroup>
                <TransitionGroup className='shopping-list'>
-                  {itemValue.items.map(({id, name})=>(
+                  {itemValue.map(({id, name})=>(
                      <CSSTransition key={id} timeout={500} classNames='fade'>
                         <ListGroupItem>
                            <Button
