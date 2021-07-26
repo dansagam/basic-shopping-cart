@@ -12,7 +12,7 @@ const ShoppingList = () => {
    const itemValue = useSelector(selectItem)
    const dispatch = useDispatch();
    useEffect(() =>{
-      dispatch(GET_ITEMS())
+      dispatch(GET_ITEMS(itemValue))
    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
    return (
