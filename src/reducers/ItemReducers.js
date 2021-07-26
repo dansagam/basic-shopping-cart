@@ -25,7 +25,7 @@ export const ItemReducers = createSlice({
       GET_ITEMS: (state, action) => {
          return {
             ...state,
-            // items: action.payload
+            items: action.payload
          }
       },
       ADD_ITEM: (state, action) => {
