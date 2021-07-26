@@ -2,14 +2,14 @@
 import { useState, useEffect } from 'react'
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import {v4 as uuid} from 'uuid'
-import { connect, useDispatch, useSelector } from 'react-redux'
-import { GET_ITEMS, selectItem, ADD_ITEM, DELETE_ITEM } from '../reducers/ItemReducers'
-import { getItems } from '../actions/itemActions'
-import PropTypes from 'prop-types'
+// import {v4 as uuid} from 'uuid'
+import {  useDispatch, useSelector } from 'react-redux'
+import { GET_ITEMS, selectItem, DELETE_ITEM } from '../reducers/ItemReducers'
+
 
 const ShoppingList = () => {
    const itemValue = useSelector(selectItem)
+   // const [nameInput, setNameInput] = useState('')
    const dispatch = useDispatch();
    useEffect(() =>{
       dispatch(GET_ITEMS(itemValue))
@@ -18,19 +18,6 @@ const ShoppingList = () => {
    return (
       <div>
          <Container>
-            <Button
-               color='dark'
-               style={{marginBottom: '2rem'}}
-               onClick={()=>{
-                 const name = prompt('enter the item')
-                 if(name) {
-                  dispatch(ADD_ITEM({id: uuid(), name})) 
-                  return
-                 } 
-               }}
-            >
-               Add Item
-            </Button>
             <ListGroup>
                <TransitionGroup className='shopping-list'>
                   {itemValue.map(({id, name})=>(
@@ -42,7 +29,6 @@ const ShoppingList = () => {
                               size='sm'
                               onClick={
                                  ()=> 
-                                 // setItems(items.filter(newitem => newitem.id !== id ))
                                  dispatch(DELETE_ITEM(id))
                               }
                            >
@@ -60,14 +46,4 @@ const ShoppingList = () => {
    )
 }
 
-ShoppingList.propTypes = {
-   getItems: PropTypes.func.isRequired,
-   item: PropTypes.object.isRequired
-}
-
-const mapStateToProps = (state, ownProps) => {
-   return {
-      item: state.item
-   }
-}
-export default connect(mapStateToProps, { getItems })(ShoppingList)
+export default ShoppingList
