@@ -1,15 +1,5 @@
 import {v4 as uuid} from 'uuid'
 import { createSlice } from '@reduxjs/toolkit'
-// import { GET_ITEMS, ADD_ITEM, DELETE_ITEM } from '../actions/types'
-
-// const initialState = {
-//    items: [
-//       {id: uuid(), name: 'Milk' },
-//       {id: uuid(), name: 'Meat' },
-//       {id: uuid(), name: 'Gala' },
-//       {id: uuid(), name: 'Spagheti'},
-//    ]
-// }
 
 export const ItemReducers = createSlice({
    name: 'item',
