@@ -3,14 +3,16 @@ import { useState, useEffect } from 'react'
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 // import {v4 as uuid} from 'uuid'
-import { connect } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
+import { GET_ITEMS, selectItem } from '../reducers/ItemReducers'
 import { getItems } from '../actions/itemActions'
 import PropTypes from 'prop-types'
 
-const ShoppingList = (props) => {
-
+const ShoppingList = () => {
+   const itemValue = useSelector(selectItem)
+   const dispatch = useDispatch();
    useEffect(() =>{
-      props.getItems()
+      dispatch(GET_ITEMS())
    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
    return (
@@ -32,7 +34,7 @@ const ShoppingList = (props) => {
             </Button>
             <ListGroup>
                <TransitionGroup className='shopping-list'>
-                  {props.item.items.map(({id, name})=>(
+                  {itemValue.items.map(({id, name})=>(
                      <CSSTransition key={id} timeout={500} classNames='fade'>
                         <ListGroupItem>
                            <Button
