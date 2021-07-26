@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react'
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-// import {v4 as uuid} from 'uuid'
+import {v4 as uuid} from 'uuid'
 import { connect, useDispatch, useSelector } from 'react-redux'
-import { GET_ITEMS, selectItem } from '../reducers/ItemReducers'
+import { GET_ITEMS, selectItem, ADD_ITEM, DELETE_ITEM } from '../reducers/ItemReducers'
 import { getItems } from '../actions/itemActions'
 import PropTypes from 'prop-types'
 
@@ -24,8 +24,7 @@ const ShoppingList = () => {
                onClick={()=>{
                  const name = prompt('enter the item')
                  if(name) {
-                  //   setItems([...items, {id: uuid(), name}]
-                  //   ) 
+                  dispatch(ADD_ITEM({id: uuid(), name})) 
                   return
                  } 
                }}
@@ -36,14 +35,15 @@ const ShoppingList = () => {
                <TransitionGroup className='shopping-list'>
                   {itemValue.map(({id, name})=>(
                      <CSSTransition key={id} timeout={500} classNames='fade'>
-                        <ListGroupItem>
+                        <ListGroupItem key={id}>
                            <Button
                               className='remove-btn'
                               color='danger'
                               size='sm'
-                              onClick={''
-                                 // ()=> 
+                              onClick={
+                                 ()=> 
                                  // setItems(items.filter(newitem => newitem.id !== id ))
+                                 dispatch(DELETE_ITEM(id))
                               }
                            >
                               &times;

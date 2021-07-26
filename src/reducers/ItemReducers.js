@@ -37,7 +37,7 @@ export const ItemReducers = createSlice({
       DELETE_ITEM: (state, action) => { 
          return {
             ...state,
-            items:  state.items.filter(item => item._id !==action.payload)
+            items:  state.items.filter(item => item.id !==action.payload)
          }
       },
    }
