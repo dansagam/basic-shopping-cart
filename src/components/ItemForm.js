@@ -42,7 +42,7 @@ const ItemForm = (props) => {
          <Button color="dark" 
             style={{marginBottom: '2rem'}}
             onClick={toggle}>Add Item</Button>
-         <Modal isOpen={modal} toggle={toggle} className=''dakdad>
+         <Modal isOpen={modal} toggle={toggle} className='dsddds'>
             <ModalHeader toggle={toggle}>Shopping Form</ModalHeader>
             <ModalBody>
                <Form onSubmit={onSubmit} >
