@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import { Input, Button, Form } from 'reactstrap'
 import {  useDispatch, useSelector } from 'react-redux'
 import { selectItem,  } from '../reducers/ItemReducers'
+import { editItem } from '../reducers/ItemReducers'
 
 const EditItemForm = (props) => {
    // eslint-disable-next-line no-unused-vars
@@ -12,7 +13,12 @@ const EditItemForm = (props) => {
    const [name, setName] = useState(props.editValue)
    const onSubmit = (e) => {
       e.preventDefault()
-      dispatch('')
+      const newEditItem = {
+         _id: props.targetId,
+         name: name
+      }
+      dispatch(editItem(newEditItem))
+      props.onEditLogic(false)
    }
    return (
       <Form onSubmit={onSubmit} >
