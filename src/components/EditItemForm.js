@@ -19,6 +19,7 @@ const EditItemForm = (props) => {
       }
       dispatch(editItem(newEditItem))
       props.onEditLogic(false)
+      props.onSetETarget('')
    }
    return (
       <Form onSubmit={onSubmit} >
