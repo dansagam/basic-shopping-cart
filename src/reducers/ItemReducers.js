@@ -32,7 +32,7 @@ export const addItem = createAsyncThunk('items/addItem', async (newItemPost) =>{
 export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId) =>{
    try {
       // eslint-disable-next-line no-unused-vars
-      const reponse = axios.delete(`/api/items/${itemId}`)
+      const reponse = await axios.delete(`/api/items/${itemId}`)
       return (itemId)
    } catch (error) {         
       return error.response.data.error
