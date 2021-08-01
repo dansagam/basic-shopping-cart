@@ -19,6 +19,7 @@ export const addItem = createAsyncThunk('items/addItem', async (newItemPost) =>{
       }
    }
    try {
+      console.log(newItemPost)
       const response = await axios.post('/api/items', newItemPost, config)
       return response.data.data
       
@@ -27,6 +28,19 @@ export const addItem = createAsyncThunk('items/addItem', async (newItemPost) =>{
       
    }
 
+})
+export const editItem = createAsyncThunk('items/editItem', async ({_id, name}) => {
+   // const config = {
+   //    header: {
+   //       'Content-Type': 'application/json'
+   //    }
+   // }
+   try {
+      const response = await axios.put(`/api/items/${_id}`, {name: name})
+      return response.data.data
+   } catch (error) {
+      return error.response.data.error   
+   }
 })
 
 export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId) =>{
@@ -111,6 +125,13 @@ export const ItemReducers = createSlice({
          return {
             ...state,
             items:  state.items.filter(item => item._id !==action.payload)
+         }
+      },
+      [editItem.fulfilled]: (state, action) =>{
+         const { _id, name } = action.payload
+         const existingItem = state.items.find((item) => item._id === _id)
+         if(existingItem) {
+            existingItem.name = name
          }
       },
    }
