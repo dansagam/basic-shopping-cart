@@ -1,12 +1,15 @@
-// eslint-disable-next-line no-unused-vars
 import { useState, useEffect } from 'react'
-import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap'
+import { Container, ListGroup, ListGroupItem /**Button*/ } from 'reactstrap'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import {  useDispatch, useSelector } from 'react-redux'
-import {selectItem, getItems, deleteItem } from '../reducers/ItemReducers'
+import {selectItem, getItems /**deleteItem */  } from '../reducers/ItemReducers'
+import EditItemForm from './EditItemForm'
+import ItemList from './ItemList'
 
 
 const ShoppingList = () => {
+   const  [editLogic, setEditLogic] = useState(false)
+   const  [eTarget, setETarget] = useState('')
    const itemValue = useSelector(selectItem)
    const dispatch = useDispatch();
    useEffect(() =>{
@@ -21,18 +24,29 @@ const ShoppingList = () => {
                   {itemValue.map(({_id, name})=>(
                      <CSSTransition key={_id} timeout={500} classNames='fade'>
                         <ListGroupItem key={_id}>
-                           <Button
-                              className='remove-btn'
-                              color='danger'
-                              size='sm'
-                              onClick={
-                                 ()=> 
-                                 dispatch(deleteItem(_id))
-                              }
-                           >
-                              &times;
-                           </Button>
-                           {name}
+                           {!editLogic 
+                              ? <> 
+                                 <ItemList onId={_id} itemName={name} /> 
+                                 <span 
+                                    style={{float: 'right', cursor: 'pointer' }} 
+                                    onDoubleClick={(e)=> {
+                                       setEditLogic(!editLogic)
+                                       setETarget(_id)
+                                    }
+                                    }
+                                 >
+                                    🔥
+                                 </span>
+                              </>
+                              : editLogic && (eTarget === _id) ?  
+                                 <EditItemForm 
+                                    onEditLogic={setEditLogic} 
+                                    onSetETarget={setETarget}
+                                    editValue= {name}
+                                    targetId = {_id}
+                                 />  
+                              : <ItemList onId={_id} itemName={name}  />}
+                           
                         </ListGroupItem>
                      </CSSTransition>
                   ))}
