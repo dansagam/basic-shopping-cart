@@ -21,7 +21,7 @@ const AppNavbar = () => {
  
    return (
       <div>
-         <Navbar color="dark" dark expand="sd" className='mb-5'>
+         <Navbar color="dark" dark expand="sm" className='mb-5'>
             <NavbarBrand href="/">Shopping List</NavbarBrand>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
