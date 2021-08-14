@@ -9,9 +9,9 @@ import {
    Label, 
    Input
 } from 'reactstrap';
-import {v4 as uuid} from 'uuid'
+// import {v4 as uuid} from 'uuid'
 import {  useDispatch } from 'react-redux'
-import { ADD_ITEM } from '../reducers/ItemReducers';
+import { /**ADD_ITEM, */ addItem } from '../reducers/ItemReducers';
 
 const ItemForm = (props) => {
    // const {
@@ -27,11 +27,10 @@ const ItemForm = (props) => {
    const onSubmit =(e)=>{
       e.preventDefault()
       const newItemObject ={
-         id: uuid(),
          name: nameInput
       }
       
-      dispatch(ADD_ITEM(newItemObject))
+      dispatch(addItem(newItemObject))
       toggle()
       setNameInput('')
 
@@ -42,7 +41,7 @@ const ItemForm = (props) => {
          <Button color="dark" 
             style={{marginBottom: '2rem'}}
             onClick={toggle}>Add Item</Button>
-         <Modal isOpen={modal} toggle={toggle} className=''dakdad>
+         <Modal isOpen={modal} toggle={toggle} className='dsddds'>
             <ModalHeader toggle={toggle}>Shopping Form</ModalHeader>
             <ModalBody>
                <Form onSubmit={onSubmit} >

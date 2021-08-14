@@ -1,31 +1,72 @@
-import {v4 as uuid} from 'uuid'
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit'
-// import { GET_ITEMS, ADD_ITEM, DELETE_ITEM } from '../actions/types'
 
-// const initialState = {
-//    items: [
-//       {id: uuid(), name: 'Milk' },
-//       {id: uuid(), name: 'Meat' },
-//       {id: uuid(), name: 'Gala' },
-//       {id: uuid(), name: 'Spagheti'},
-//    ]
-// }
+
+
+export const getItems = createAsyncThunk('items/getItems', async () =>{
+   try {
+      const response = await axios.get('/api/items')
+      return response.data.data
+   } catch (error) {
+      return error.response.data.error
+   }
+});
+export const addItem = createAsyncThunk('items/addItem', async (newItemPost) =>{
+   const config = {
+      header: {
+         'Content-Type': 'application/json'
+      }
+   }
+   try {
+      console.log(newItemPost)
+      const response = await axios.post('/api/items', newItemPost, config)
+      return response.data.data
+      
+   } catch (error) {
+      return error.response.data.error
+      
+   }
+
+})
+export const editItem = createAsyncThunk('items/editItem', async ({_id, name}) => {
+   // const config = {
+   //    header: {
+   //       'Content-Type': 'application/json'
+   //    }
+   // }
+   try {
+      const response = await axios.put(`/api/items/${_id}`, {name: name})
+      return response.data.data
+   } catch (error) {
+      return error.response.data.error   
+   }
+})
+
+export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId) =>{
+   try {
+      // eslint-disable-next-line no-unused-vars
+      const reponse = await axios.delete(`/api/items/${itemId}`)
+      return (itemId)
+   } catch (error) {         
+      return error.response.data.error
+      
+   }
+})
 
 export const ItemReducers = createSlice({
-   name: 'item',
+   name: 'items',
    initialState: {
-      items: [
-         {id: uuid(), name: 'Milk' },
-         {id: uuid(), name: 'Meat' },
-         {id: uuid(), name: 'Gala' },
-         {id: uuid(), name: 'Spagheti'},
-      ]
+      items: [],
+      error: null,
+      loading: false
    },
    reducers: {
       GET_ITEMS: (state, action) => {
          return {
             ...state,
-            items: action.payload
+            loading: false,
+            items: action.payload,
          }
       },
       ADD_ITEM: (state, action) => {
@@ -40,42 +81,64 @@ export const ItemReducers = createSlice({
             items:  state.items.filter(item => item.id !==action.payload)
          }
       },
+      EDIT_ITEM: (state, action) => {
+         const { id, name} = action.payload
+         const existItem = state.items.find(item => item.id === id)
+         if(existItem){
+            existItem.name = name
+         }
+      },
+      ITEMS_LOADING: (state) =>{
+         return{
+            ...state,
+            loading: true 
+         }
+      },
+      ITEMS_ERROR: (state, action) =>{
+         return {
+            ...state,
+            error: action.payload
+         }
+      }
+   }, 
+   extraReducers: {
+      [getItems.pending]: (state, action) =>{
+         state.loading = true
+      },
+      [getItems.fulfilled]:  (state, action) => {  
+         // state.loading = false
+         // state.items = state.items.concat(action.payload)
+         return {
+            ...state,
+            loading: false,
+            items: action.payload,
+         }
+
+      },
+      [addItem.fulfilled]: (state, action) => {
+         return {
+            ...state,
+            items: [...state.items, action.payload]
+         }
+      },
+      [deleteItem.fulfilled]: (state, action) => { 
+         return {
+            ...state,
+            items:  state.items.filter(item => item._id !==action.payload)
+         }
+      },
+      [editItem.fulfilled]: (state, action) =>{
+         const { _id, name } = action.payload
+         const existingItem = state.items.find((item) => item._id === _id)
+         if(existingItem) {
+            existingItem.name = name
+         }
+      },
    }
 });
 
-export const { GET_ITEMS, ADD_ITEM, DELETE_ITEM } = ItemReducers.actions
+export const { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING, ITEMS_ERROR, EDIT_ITEM } = ItemReducers.actions
 export const selectItem = state => state.item.items
 
 
-
 export default ItemReducers.reducer;
-
-
-// function ItemReducers (state = initialState, action) {
-//    switch(action.type) {
-//       case GET_ITEMS:
-//          return {
-//             ...state,
-//             // items: action.payload
-//          }
-//       case DELETE_ITEM: 
-//       return {
-//          ...state,
-//          items:  state.items.filter(item => item._id !==action.payload)
-//       }
-//       case ADD_ITEM:
-//          return {
-//             ...state,
-//             items: [...state.items, action.payload]
-//          }
-//       case 'TRANSACTION_ERROR':
-//          return {
-//             ...state,
-//             error: action.payload
-//          }
-//       default:
-//          return state 
-//    }
-// }
-
-
