@@ -4,15 +4,15 @@ import { createSlice } from '@reduxjs/toolkit'
 
 
 
-export const getItems = createAsyncThunk('items/getItems', async () =>{
+export const getItems = createAsyncThunk('items/getItems', async (arg, {rejectWithValue}) =>{
    try {
       const response = await axios.get('/api/items')
       return response.data.data
    } catch (error) {
-      return error.response.data.error
+      return rejectWithValue(error.response.data.error)
    }
 });
-export const addItem = createAsyncThunk('items/addItem', async (newItemPost, {getState}) =>{
+export const addItem = createAsyncThunk('items/addItem', async (newItemPost, {getState, rejectWithValue}) =>{
    let token = getState().auth.token;
    const config = {
       headers: {
@@ -26,12 +26,12 @@ export const addItem = createAsyncThunk('items/addItem', async (newItemPost, {ge
       return response.data.data
       
    } catch (error) {
-      return error.response.data.error
+      return rejectWithValue(error.response.data.error)
       
    }
 
 })
-export const editItem = createAsyncThunk('items/editItem', async ({_id, name}, {getState}) => {
+export const editItem = createAsyncThunk('items/editItem', async ({_id, name}, {getState, rejectWithValue}) => {
    let token = getState().auth.token;
    const config = {
       headers: {
@@ -43,11 +43,11 @@ export const editItem = createAsyncThunk('items/editItem', async ({_id, name}, {
       const response = await axios.put(`/api/items/${_id}`, {name: name}, config)
       return response.data.data
    } catch (error) {
-      return error.response.data.error   
+      return rejectWithValue(error.response.data.error)  
    }
 })
 
-export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId, {getState}) =>{
+export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId, {getState, rejectWithValue}) =>{
    try {
       let token = getState().auth.token;
       const config = {
@@ -60,7 +60,7 @@ export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId, {g
       const reponse = await axios.delete(`/api/items/${itemId}`, config)
       return (itemId)
    } catch (error) {         
-      return error.response.data.error
+      return rejectWithValue(error.response.data.error)
       
    }
 })
