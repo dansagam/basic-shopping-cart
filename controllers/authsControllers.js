@@ -23,11 +23,15 @@ export async function authenticateUser(req, res, next){
                name: existingUser.name 
             }
          })
+      }else{
+         res.status(401)
+         throw new Error('Invalid credential')
       }
 
    } catch (error) {
-      res.status(401)
-      throw new Error('Invalid email or password')
+      res.json({
+         msg: error.message
+      })
    }
 }
 export async function getAuthenticatedUser(req, res, next){
