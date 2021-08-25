@@ -9,7 +9,7 @@ export const getItems = createAsyncThunk('items/getItems', async (arg, {rejectWi
       const response = await axios.get('/api/items')
       return response.data.data
    } catch (error) {
-      return rejectWithValue(error.response.data.error)
+      return rejectWithValue(error.response)
    }
 });
 export const addItem = createAsyncThunk('items/addItem', async (newItemPost, {getState, rejectWithValue}) =>{
@@ -26,7 +26,7 @@ export const addItem = createAsyncThunk('items/addItem', async (newItemPost, {ge
       return response.data.data
       
    } catch (error) {
-      return rejectWithValue(error.response.data.error)
+      return rejectWithValue(error.response)
       
    }
 
@@ -43,7 +43,7 @@ export const editItem = createAsyncThunk('items/editItem', async ({_id, name}, {
       const response = await axios.put(`/api/items/${_id}`, {name: name}, config)
       return response.data.data
    } catch (error) {
-      return rejectWithValue(error.response.data.error)  
+      return rejectWithValue(error.response)  
    }
 })
 
@@ -60,7 +60,7 @@ export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId, {g
       const reponse = await axios.delete(`/api/items/${itemId}`, config)
       return (itemId)
    } catch (error) {         
-      return rejectWithValue(error.response.data.error)
+      return rejectWithValue(error.response)
       
    }
 })
@@ -69,42 +69,14 @@ export const ItemReducers = createSlice({
    name: 'items',
    initialState: {
       items: [],
-      error: null,
+      error: {
+         msg: {},
+         status: null,
+         id: null
+      },
       loading: false
    },
    reducers: {
-      GET_ITEMS: (state, action) => {
-         return {
-            ...state,
-            loading: false,
-            items: action.payload,
-         }
-      },
-      ADD_ITEM: (state, action) => {
-         return {
-            ...state,
-            items: [...state.items, action.payload]
-         }
-      },
-      DELETE_ITEM: (state, action) => { 
-         return {
-            ...state,
-            items:  state.items.filter(item => item.id !==action.payload)
-         }
-      },
-      EDIT_ITEM: (state, action) => {
-         const { id, name} = action.payload
-         const existItem = state.items.find(item => item.id === id)
-         if(existItem){
-            existItem.name = name
-         }
-      },
-      ITEMS_LOADING: (state) =>{
-         return{
-            ...state,
-            loading: true 
-         }
-      },
       ITEMS_ERROR: (state, action) =>{
          return {
             ...state,
@@ -126,17 +98,50 @@ export const ItemReducers = createSlice({
          }
 
       },
+      [getItems.rejected]: (state, action) =>{
+         return {
+            ...state,
+            error:{
+               msg: action.payload.data.msg,
+               status: action.payload.status,
+               id: action.payload.statusText
+            }
+         }
+
+      },
       [addItem.fulfilled]: (state, action) => {
          return {
             ...state,
             items: [...state.items, action.payload]
          }
       },
+      [addItem.rejected]: (state, action) =>{
+         return {
+            ...state,
+            error:{
+               msg: action.payload.data.msg,
+               status: action.payload.status,
+               id: action.payload.statusText
+            }
+         }
+
+      },
       [deleteItem.fulfilled]: (state, action) => { 
          return {
             ...state,
             items:  state.items.filter(item => item._id !==action.payload)
          }
+      },
+      [deleteItem.rejected]: (state, action) =>{
+         return {
+            ...state,
+            error:{
+               msg: action.payload.data.msg,
+               status: action.payload.status,
+               id: action.payload.statusText
+            }
+         }
+
       },
       [editItem.fulfilled]: (state, action) =>{
          const { _id, name } = action.payload
@@ -145,10 +150,20 @@ export const ItemReducers = createSlice({
             existingItem.name = name
          }
       },
+      [editItem.rejected]: (state, action) =>{
+         return {
+            ...state,
+            error:{
+               msg: action.payload.data.msg,
+               status: action.payload.status,
+               id: action.payload.statusText
+            }
+         }
+      },
    }
 });
 
-export const { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING, ITEMS_ERROR, EDIT_ITEM } = ItemReducers.actions
+export const { ITEMS_ERROR } = ItemReducers.actions
 export const selectItem = state => state.item.items
 
 
