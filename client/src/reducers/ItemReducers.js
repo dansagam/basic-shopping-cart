@@ -12,14 +12,16 @@ export const getItems = createAsyncThunk('items/getItems', async () =>{
       return error.response.data.error
    }
 });
-export const addItem = createAsyncThunk('items/addItem', async (newItemPost) =>{
+export const addItem = createAsyncThunk('items/addItem', async (newItemPost, {getState}) =>{
+   let token = getState().auth.token;
    const config = {
-      header: {
-         'Content-Type': 'application/json'
+      headers: {
+         'Content-Type': 'application/json',
+         'x-auth-token': token
       }
    }
    try {
-      console.log(newItemPost)
+      
       const response = await axios.post('/api/items', newItemPost, config)
       return response.data.data
       
@@ -29,24 +31,33 @@ export const addItem = createAsyncThunk('items/addItem', async (newItemPost) =>{
    }
 
 })
-export const editItem = createAsyncThunk('items/editItem', async ({_id, name}) => {
-   // const config = {
-   //    header: {
-   //       'Content-Type': 'application/json'
-   //    }
-   // }
+export const editItem = createAsyncThunk('items/editItem', async ({_id, name}, {getState}) => {
+   let token = getState().auth.token;
+   const config = {
+      headers: {
+         'Content-Type': 'application/json',
+         'x-auth-token': token
+      }
+   }
    try {
-      const response = await axios.put(`/api/items/${_id}`, {name: name})
+      const response = await axios.put(`/api/items/${_id}`, {name: name}, config)
       return response.data.data
    } catch (error) {
       return error.response.data.error   
    }
 })
 
-export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId) =>{
+export const deleteItem = createAsyncThunk('items/deleteItem', async (itemId, {getState}) =>{
    try {
+      let token = getState().auth.token;
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token
+         }
+      }
       // eslint-disable-next-line no-unused-vars
-      const reponse = await axios.delete(`/api/items/${itemId}`)
+      const reponse = await axios.delete(`/api/items/${itemId}`, config)
       return (itemId)
    } catch (error) {         
       return error.response.data.error
