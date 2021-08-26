@@ -10,7 +10,7 @@ import {
    Input
 } from 'reactstrap';
 // import {v4 as uuid} from 'uuid'
-import {  useDispatch } from 'react-redux'
+import {  useDispatch, useSelector } from 'react-redux'
 import { /**ADD_ITEM, */ addItem } from '../reducers/ItemReducers';
 
 const ItemForm = (props) => {
@@ -19,6 +19,7 @@ const ItemForm = (props) => {
    //   className
    // } = props;
    // const [nameInput, setNameInput] = useState('')
+   const {isAuthenticated} = useSelector(state => state.auth)
    const dispatch = useDispatch();
 
    const [modal, setModal] = useState(false);
@@ -38,9 +39,16 @@ const ItemForm = (props) => {
 
    return (
       <div>
+         {isAuthenticated ? 
          <Button color="dark" 
             style={{marginBottom: '2rem'}}
-            onClick={toggle}>Add Item</Button>
+            onClick={toggle}
+            >
+               Add Item
+         </Button> 
+         : 
+         <h4 className="mb-3 ml-3">Please log in to add manage your items</h4>}
+
          <Modal isOpen={modal} toggle={toggle} className='dsddds'>
             <ModalHeader toggle={toggle}>Shopping Form</ModalHeader>
             <ModalBody>

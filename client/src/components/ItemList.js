@@ -1,24 +1,27 @@
 import React from 'react'
 import { Button } from 'reactstrap'
-import {  useDispatch, } from 'react-redux'
+import {  useDispatch, useSelector } from 'react-redux'
 import {  deleteItem } from '../reducers/ItemReducers'
 
 const ItemList = (props) => {
-   // const itemValue = useSelector(selectItem)
+   const {isAuthenticated} = useSelector(state => state.auth)
    const dispatch = useDispatch();
    return (
       <>
-         <Button
-            className='remove-btn'
-            color='danger'
-            size='sm'
-            onClick={
-               ()=> 
-               dispatch(deleteItem(props.onId))
-            }
-         >
-            &times;
-         </Button>
+         {  isAuthenticated ?
+            <Button
+               className='remove-btn'
+               color='danger'
+               size='sm'
+               onClick={
+                  ()=> 
+                  dispatch(deleteItem(props.onId))
+               }
+            >
+               &times;
+            </Button>
+         : null
+         }
          {props.itemName}
       </>
    )
