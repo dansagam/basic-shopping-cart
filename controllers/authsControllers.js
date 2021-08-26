@@ -23,11 +23,15 @@ export async function authenticateUser(req, res, next){
                name: existingUser.name 
             }
          })
+      }else{
+         res.status(401)
+         throw new Error('Invalid credential')
       }
 
    } catch (error) {
-      res.status(401)
-      throw new Error('Invalid email or password')
+      res.json({
+         msg: error.message
+      })
    }
 }
 export async function getAuthenticatedUser(req, res, next){
@@ -35,6 +39,7 @@ export async function getAuthenticatedUser(req, res, next){
       const authUser = await User.findById(req.user.id).select('-password')
       return res.json(authUser)
    } catch (error) {
+      console.log(error)
       throw error
    }
 }

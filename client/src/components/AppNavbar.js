@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
+import { useSelector } from 'react-redux';
 import {
    Collapse,
    Navbar,
@@ -14,10 +15,40 @@ import {
    DropdownItem,
    NavbarText
  } from 'reactstrap';
+import Login from './auth/Login';
+import Logout from './auth/Logout';
+import RegisterModal from './auth/RegisterModal';
+
+
 const AppNavbar = () => {
    const [isOpen, setIsOpen] = useState(false);
+   const { isAuthenticated, user } = useSelector(state => state.auth)
  
    const toggle = () => setIsOpen(!isOpen);
+   const loginLink = (
+      <Fragment>
+         <NavItem>
+            <span className='navbar-text mr-3'>
+               <strong>{user ? `Welcome ${user.name}` : ''}</strong>
+            </span>
+         </NavItem> 
+         <NavItem>
+            <Logout />
+         </NavItem> 
+
+      </Fragment>
+   )
+   const regLink = (
+      <Fragment>
+         <NavItem>
+            <RegisterModal />
+         </NavItem>
+         <NavItem>
+            <Login />
+         </NavItem>
+      </Fragment>
+
+   )
  
    return (
       <div>
@@ -27,11 +58,10 @@ const AppNavbar = () => {
             <Collapse isOpen={isOpen} navbar>
                <Nav className="ml-auto" navbar>
                   <NavItem>
-                     <NavLink href="/components/">Components</NavLink>
+                     <NavLink href="https://github.com/dansagam" target='_blank'>GitHub</NavLink>
                   </NavItem>
-                  <NavItem>
-                     <NavLink href="https://github.com/dansagam">GitHub</NavLink>
-                  </NavItem>
+                  { isAuthenticated ? loginLink : regLink }
+
                   {/* <UncontrolledDropdown nav inNavbar>
                      <DropdownToggle nav caret>
                      Options
@@ -50,7 +80,7 @@ const AppNavbar = () => {
                      </DropdownMenu>
                   </UncontrolledDropdown> */}
                </Nav>
-               <NavbarText>Simple Text</NavbarText>
+               {/* <NavbarText>Simple Text</NavbarText> */}
             </Collapse>
          </Navbar>
       </div>

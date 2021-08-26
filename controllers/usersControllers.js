@@ -15,7 +15,7 @@ export async function registerUser(req, res, next){
          const existingUser = await User.findOne({email})
          if(existingUser) { 
             res.status(400) 
-            throw new Error('Invalid user data')
+            throw new Error(' user already exist')
          }
          const newUser = await User.create({
             name,
